@@ -54,6 +54,6 @@ export default async function handler(req, res) {
 
     } catch (error) {
         console.error('Export error:', error);
-        res.status(500).send('Error retrieving data');
+        res.status(500).send(`Error retrieving data: ${error.message || error}`);
     }
 }
