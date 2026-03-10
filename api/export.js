@@ -16,8 +16,9 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Retrieve the last 100 evaluations
-        const evaluations = await redis.lrange('evaluations', 0, 99);
+        // Retrieve the last 1000 evaluations and reverse them so newest are at the bottom (append)
+        const evaluations = await redis.lrange('evaluations', 0, 999);
+        evaluations.reverse();
 
         if (!evaluations || evaluations.length === 0) {
             return res.status(200).send('Date,Brief,Advisor Role,Advisor Name,Report\nNo records found,,,,');
