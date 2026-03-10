@@ -1,13 +1,13 @@
-import { kv } from '@vercel/kv';
-// Redeploy trigger to inject KV environment variables
+import { Redis } from '@upstash/redis'
+
+// Initialize Redis from environment variables automatically injected by Vercel
+const redis = Redis.fromEnv()
 
 export default async function handler(req, res) {
     if (req.method !== 'GET') {
         return res.status(405).send('Method Not Allowed');
     }
 
-    // Simple security check using a query parameter key
-    // You should set this environment variable in Vercel: EXPORT_SECRET_KEY
     const secretKey = process.env.EXPORT_SECRET_KEY || 'focus2026';
     const providedKey = req.query.key;
 
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
     try {
         // Retrieve the last 100 evaluations
-        const evaluations = await kv.lrange('evaluations', 0, 99);
+        const evaluations = await redis.lrange('evaluations', 0, 99);
 
         if (!evaluations || evaluations.length === 0) {
             return res.status(200).send('Date,Brief,Advisor Role,Advisor Name,Report\nNo records found,,,,');
@@ -49,7 +49,6 @@ export default async function handler(req, res) {
             csv += `${date},${brief},${role},${name},${report}\n`;
         }
 
-        // Return as exact CSV format so IMPORTDATA works perfectly
         res.setHeader('Content-Type', 'text/csv; charset=utf-8');
         res.status(200).send(csv);
 

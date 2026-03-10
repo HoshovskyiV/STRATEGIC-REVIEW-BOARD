@@ -1,4 +1,7 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis'
+
+// Initialize Redis from environment variables automatically injected by Vercel
+const redis = Redis.fromEnv()
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -26,12 +29,12 @@ export default async function handler(req, res) {
             report: data.report
         };
 
-        // Add to a list of all evaluations in Vercel KV
-        await kv.lpush('evaluations', entry);
+        // Add to a list of all evaluations using Upstash Redis lpush
+        await redis.lpush('evaluations', entry);
 
         return res.status(200).json({ success: true, id: entryId });
     } catch (error) {
-        console.error('Error saving to KV:', error);
+        console.error('Error saving to Upstash Redis:', error);
         return res.status(500).json({ error: 'Internal Server Error', details: error.message });
     }
 }
