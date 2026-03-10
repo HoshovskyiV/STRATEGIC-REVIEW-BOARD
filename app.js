@@ -29,6 +29,7 @@ const stateCheckmark = document.getElementById('stateCheckmark');
 
 const advisorCheckboxesContainer = document.getElementById('advisorCheckboxes');
 const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+const copyTextBtn = document.getElementById('copyTextBtn');
 
 // Init Checkboxes
 PERSONAS.forEach(p => {
@@ -124,6 +125,33 @@ downloadPdfBtn.addEventListener('click', () => {
         </html>
     `);
     printWin.document.close();
+});
+
+// Copy Text to Clipboard
+copyTextBtn.addEventListener('click', () => {
+    const text = readerText.innerText;
+    if (!text || text.trim() === '') {
+        alert('No report content to copy!');
+        return;
+    }
+
+    navigator.clipboard.writeText(text).then(() => {
+        const originalSvg = copyTextBtn.innerHTML;
+        // Success checkmark SVG
+        copyTextBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10873a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        `;
+        copyTextBtn.classList.add('copy-success');
+
+        setTimeout(() => {
+            copyTextBtn.innerHTML = originalSvg;
+            copyTextBtn.classList.remove('copy-success');
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+    });
 });
 
 // File State
