@@ -321,6 +321,9 @@ startEvalBtn.addEventListener('click', async () => {
     readingContent.style.display = 'none';
     readingPanePlaceholder.style.display = 'flex';
 
+    const resultsLayout = document.querySelector('.results-layout');
+    if (resultsLayout) resultsLayout.style.display = 'grid'; // Re-show the results area
+
     progressText.innerText = PROGRESS_MESSAGES[0];
     progressBarFill.style.width = '5%';
     progressBarFill.classList.add('is-animating');
