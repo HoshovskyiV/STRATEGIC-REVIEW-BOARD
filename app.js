@@ -13,7 +13,7 @@ const readingContent = document.getElementById('readingContent');
 const readerName = document.getElementById('readerName');
 const readerMeta = document.getElementById('readerMeta');
 const readerText = document.getElementById('readerText');
-const readingPanePlaceholder = document.querySelector('.reading-pane-placeholder');
+
 
 const fileInput = document.getElementById('fileInput');
 const dropZone = document.getElementById('dropZone');
@@ -319,7 +319,6 @@ startEvalBtn.addEventListener('click', async () => {
 
     personasSidebar.innerHTML = '';
     readingContent.style.display = 'none';
-    readingPanePlaceholder.style.display = 'flex';
 
     const resultsLayout = document.querySelector('.results-layout');
     if (resultsLayout) resultsLayout.style.display = 'grid'; // Re-show the results area
@@ -379,7 +378,7 @@ startEvalBtn.addEventListener('click', async () => {
             document.querySelectorAll('.compact-persona').forEach(c => c.classList.remove('active'));
             card.classList.add('active');
 
-            readingPanePlaceholder.style.display = 'none';
+
             readingContent.style.display = 'block';
 
             readerName.innerText = p.name;
