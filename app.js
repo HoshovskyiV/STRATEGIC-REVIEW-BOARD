@@ -453,6 +453,19 @@ startEvalBtn.addEventListener('click', async () => {
                 try {
                     const response = await fetchGemini(persona.raw_prompt, cleanedPrompt, fileData);
                     responses[persona.id] = response;
+
+                    // Fire and forget save to Vercel Database
+                    fetch('/api/save', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            brief: msg ? msg : '[Attachment Only]',
+                            advisorName: persona.name,
+                            advisorRole: persona.role,
+                            report: response
+                        })
+                    }).catch(err => console.error('Failed to save log:', err));
+
                     statusElem.className = 'compact-status status-done';
                     statusElem.innerText = 'DONE';
 
