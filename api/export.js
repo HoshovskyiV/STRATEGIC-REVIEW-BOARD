@@ -1,4 +1,5 @@
 import { kv } from '@vercel/kv';
+// Redeploy trigger to inject KV environment variables
 
 export default async function handler(req, res) {
     if (req.method !== 'GET') {
